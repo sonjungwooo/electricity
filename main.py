@@ -63,4 +63,10 @@ combined_df = pd.concat([
 st.subheader("📊 전력 수요 추이 및 예측")
 fig, ax = plt.subplots(figsize=(10, 5))
 ax.plot(past_df["year"], past_df["electricity_demand"], label="실제 수요", marker='o')
-ax.plot(futu
+ax.plot(future_df["year"], future_df["electricity_demand"], label="예측 수요 (2024~2030)", linestyle='--', marker='o')
+ax.set_xlabel("연도")
+ax.set_ylabel("전력 수요 (TWh)")
+ax.set_title("전력 수요 추이 및 2030년까지 예측")
+ax.legend()
+ax.grid(True)
+st.pyplot(fig)
