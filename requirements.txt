@@ -4,3 +4,5 @@ numpy
 scikit-learn
 matplotlib
 plotly
+streamlit-plotly-events
+statsmodels
