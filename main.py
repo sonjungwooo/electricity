@@ -1,7 +1,7 @@
 import streamlit as st
 
 def show_intro():
-    st.title("⚡ 지속 가능한 발전과 전력 소비 데이터 프로젝트 소개 ⚡")
+    st.title(" 지속 가능한 발전(SDG)과 전력 소비 데이터 프로젝트 ")
     st.markdown("""
     **지속 가능한 발전(Sustainable Development)**이란,  
     현재 세대의 필요를 충족하면서도 미래 세대가 그들의 필요를 충족할 수 있는 능력을 해치지 않는 발전을 의미합니다.  
