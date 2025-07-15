@@ -1,72 +1,30 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.preprocessing import StandardScaler
 
-st.title("🔌 세계 전력 수요 분석 및 2030년까지 예측")
+def data_visualization_page():
+    st.title("데이터 시각화 페이지")
+    st.write("전력 소비 데이터를 시각화하는 기능입니다.")
+    # 여기에 그래프 그리기 코드 등 추가
 
-# 📁 CSV 불러오기 (같은 디렉토리에 있어야 함)
-@st.cache_data
-def load_data():
-    df = pd.read_csv("World Energy Consumption.csv")
-    features = ['year', 'population', 'gdp', 'energy_per_capita', 'electricity_demand']
-    return df[features].dropna()
+def ml_library_usage():
+    st.title("머신러닝 라이브러리 활용")
+    st.write("Scikit-learn, XGBoost 등의 라이브러리를 활용한 예측 모델입니다.")
+    # 학습/예측 관련 코드 및 출력
 
-df = load_data()
+def power_consumption_prediction():
+    st.title("전력 소비량 기반 예측")
+    st.write("머신러닝 모델로 미래 전력 소비량을 예측하고 시각화합니다.")
+    # 예측 결과 시각화 코드
 
-# 🎯 예측 모델 학습
-features = ['year', 'population', 'gdp', 'energy_per_capita']
-target = 'electricity_demand'
+def main():
+    st.sidebar.title("메뉴")
+    page = st.sidebar.selectbox("페이지 선택", ["데이터 시각화", "머신러닝 활용", "전력 예측"])
 
-X = df[features]
-y = df[target]
+    if page == "데이터 시각화":
+        data_visualization_page()
+    elif page == "머신러닝 활용":
+        ml_library_usage()
+    elif page == "전력 예측":
+        power_consumption_prediction()
 
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-model = RandomForestRegressor(n_estimators=100, random_state=42)
-model.fit(X_scaled, y)
-
-# 📈 과거 데이터 그룹화
-past_df = df.groupby("year")[target].mean().reset_index()
-
-# 🔮 미래 예측: 2024~2030
-future_years = np.arange(past_df["year"].max() + 1, 2031)
-mean_vals = {
-    "population": df["population"].mean(),
-    "gdp": df["gdp"].mean(),
-    "energy_per_capita": df["energy_per_capita"].mean()
-}
-future_data = pd.DataFrame({
-    "year": future_years,
-    "population": mean_vals["population"],
-    "gdp": mean_vals["gdp"],
-    "energy_per_capita": mean_vals["energy_per_capita"]
-})
-X_future_scaled = scaler.transform(future_data)
-future_preds = model.predict(X_future_scaled)
-
-future_df = pd.DataFrame({
-    "year": future_years,
-    "electricity_demand": future_preds
-})
-
-# 📊 전체 결합
-combined_df = pd.concat([
-    past_df.rename(columns={"electricity_demand": "전력 수요"}),
-    future_df.rename(columns={"electricity_demand": "전력 수요"})
-])
-
-# 그래프 그리기
-st.subheader("📊 전력 수요 추이 및 예측")
-fig, ax = plt.subplots(figsize=(10, 5))
-ax.plot(past_df["year"], past_df["electricity_demand"], label="실제 수요", marker='o')
-ax.plot(future_df["year"], future_df["electricity_demand"], label="예측 수요 (2024~2030)", linestyle='--', marker='o')
-ax.set_xlabel("연도")
-ax.set_ylabel("전력 수요 (TWh)")
-ax.set_title("전력 수요 추이 및 2030년까지 예측")
-ax.legend()
-ax.grid(True)
-st.pyplot(fig)
+if __name__ == "__main__":
+    main()
